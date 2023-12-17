@@ -35,6 +35,11 @@ enum JoystickDirection {
 #define CONTRAST_PIN 3
 #define EEPROM_CONTRAST_ADDR 10
 
+/***************** LED.H *****************/
+#define BLUE_PIN A3
+#define GREEN_PIN A4
+#define RED_PIN A5
+
 /***************** BUZZER.H *****************/
 #define BUZZER_PIN A2
 #define NOTE_B0 31
