@@ -1,7 +1,5 @@
 #ifndef JOYSTICK_H
 #define JOYSTICK_H
-#include <ezButton.h>
-#include "Constants.h"
 
 class Joystick {
 private:

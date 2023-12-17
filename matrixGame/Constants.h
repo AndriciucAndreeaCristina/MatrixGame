@@ -20,9 +20,10 @@ enum JoystickDirection {
 };
 
 /***************** LEDMATRIX.H *****************/
-#define DIN 7
-#define CS 6
-#define CLK 5
+#define DIN 12
+#define CS 11
+#define CLK 10
+#define EEPROM_BRIGHTNESS_ADDR 20
 
 /***************** LCDDISPLAY.H *****************/
 #define RS 9
@@ -31,6 +32,7 @@ enum JoystickDirection {
 #define D5 6
 #define D6 5
 #define D7 4
+#define EEPROM_CONTRAST_ADDR 10
 
 /***************** BUZZER.H *****************/
 #define BUZZER_PIN A2
