@@ -1,6 +1,7 @@
 #include "Constants.h"
 #include <EEPROM.h>
 #include <LiquidCrystal.h>
+#include <LedControl.h>
 #include <ezButton.h>
 #include "Joystick.h"
 #include "LEDMatrix.h"
@@ -8,6 +9,7 @@
 
 Joystick* joystick = Joystick::getJoystickInstance();
 LEDMatrix ledMatrix(DIN, CLK, CS);
+LCDDisplay lcd(RS, EN, D4, D5, D6, D7);
 
 void setup() {
   Serial.begin(9600);
@@ -15,8 +17,10 @@ void setup() {
 
 void loop() {
   joystick->updateButtonState();
-  //matrix.setPixel(0, 0, 2); // Set the pixel at (0, 0) to 1
   ledMatrix.generateMap();
   ledMatrix.updateDisplay();
-  delay(500);
+  lcd.printString("Hello, world!");
+  delay(1000);
+  lcd.printString("Arduino", 0, 1);
+  delay(1000);
 }

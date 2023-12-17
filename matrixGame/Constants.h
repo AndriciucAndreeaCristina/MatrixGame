@@ -32,6 +32,7 @@ enum JoystickDirection {
 #define D5 6
 #define D6 5
 #define D7 4
+#define CONTRAST_PIN 3
 #define EEPROM_CONTRAST_ADDR 10
 
 /***************** BUZZER.H *****************/
