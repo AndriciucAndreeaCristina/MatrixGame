@@ -13,7 +13,8 @@ private:
   JoystickDirection joystickState;
   ezButton button;
   bool wasPressed;
-  static Joystick* joystickInstance;
+
+public:
   Joystick()
     : button(JOYSTICK_SW) {
     pinMode(JOYSTICK_X, INPUT);
@@ -22,8 +23,6 @@ private:
     button.setDebounceTime(100);
     joystickState = CENTER;
   }
-public:
-
   int readX() {
     xValue = analogRead(JOYSTICK_X);
     return xValue;
@@ -80,15 +79,6 @@ public:
     }
     return joystickState;
   }
-
-  static Joystick* getJoystickInstance() {
-    if (joystickInstance == nullptr) {
-      joystickInstance = new Joystick();
-    }
-    return joystickInstance;
-  }
 };
 
 #endif /*JOYSTICK_H*/
-
-Joystick* Joystick::joystickInstance = nullptr;

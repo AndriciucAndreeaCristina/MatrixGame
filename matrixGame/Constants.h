@@ -40,6 +40,24 @@ enum JoystickDirection {
 #define GREEN_PIN A4
 #define RED_PIN A5
 
+/***************** MENU.H *****************/
+enum States {
+  IDLE,
+  START,
+  MENU,
+  ABOUT,
+  HIGHSCORES,
+  SETTINGS,
+  ENTER_NAME,
+  LCD_BRIGHTNESS_CONTROL,
+  MATRIX_BRIGHTNESS_CONTROL,
+  SOUND,
+  GAMEPLAY,
+  END_LOSE,
+  END_WIN
+};
+static States systemState = IDLE;
+
 /***************** BUZZER.H *****************/
 #define BUZZER_PIN A2
 #define NOTE_B0 31
