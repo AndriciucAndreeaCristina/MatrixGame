@@ -1,3 +1,4 @@
+#include "Arduino.h"
 #ifndef RGBLED_H
 #define RGBLED_H
 
@@ -16,7 +17,7 @@ public:
     analogWrite(GREEN_PIN, green);
     analogWrite(BLUE_PIN, blue);
   }
-  void blinkColor(int red, int green, int blue, int blinkInterval) {
+  void blinkColor(int red, int green, int blue, const int blinkInterval) {
     unsigned long currentMillis = millis();
     if (currentMillis - lastBlinkTime >= blinkInterval) {
       lastBlinkTime = currentMillis;

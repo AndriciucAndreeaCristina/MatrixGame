@@ -1,3 +1,4 @@
+#include "EEPROM.h"
 #include "HardwareSerial.h"
 #ifndef MENU_H
 #define MENU_H
@@ -5,6 +6,7 @@
 class Menu {
 private:
   static Menu* menuInstance;
+  bool generate = true;
   Menu() {
     systemState = IDLE;
   }
@@ -13,6 +15,7 @@ public:
     if (menuInstance == nullptr) {
       menuInstance = new Menu();
     }
+
     return menuInstance;
   }
 
@@ -39,27 +42,31 @@ public:
             lcd.clear();
             switch (choice) {
               case 0:
-                systemState = SETTINGS;
+                systemState = START;
                 break;
               case 1:
-                systemState = ABOUT;
+                systemState = HIGHSCORES;
                 break;
               case 2:
-                systemState = HOW_TO_PLAY;
+                systemState = SETTINGS;
                 break;
               case 3:
-                systemState = START;
+                systemState = ABOUT;
+                break;
+              case 4:
+                systemState = HOW_TO_PLAY;
                 break;
               default:
                 break;
             }
+            lcd.resetCursorLine();
           }
           break;
         }
       case START:
         {
-          Serial.println("Start");
           lcd.clear();
+          ledMatrix.gamePlay();
           break;
         }
       case HOW_TO_PLAY:
@@ -88,43 +95,139 @@ public:
         }
       case HIGHSCORES:
         {
-          Serial.println("HighScores");
-          break;
-        }
-      case SETTINGS:
-        {
-          Serial.println("Menu Settings");
+          lcd.resetCursorLine();
+          JoystickDirection direction = joystick.getJoystickDirection();
           lcd.clear();
-          joystick.updateButtonState();
+          lcd.displayHighscores(direction);
           if (joystick.isButtonShortPressed()) {
             lcd.resetCursorLine();
             systemState = MENU;
           }
           break;
         }
+      case SETTINGS:
+        {
+          Serial.println("Menu Settings");
+          JoystickDirection direction = joystick.getJoystickDirection();
+          lcd.updateDisplaySettings(direction);
+          ledMatrix.updateDisplaySettings();
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            /* "Enter name", "Sound", "Dificulty", "LCD Brightness", "LCD Contrast", "LED Brightness" };*/
+            int choice = lcd.getMenuItemIndex();
+            Serial.println(choice);
+            lcd.clear();
+            switch (choice) {
+              case 0:
+                systemState = ENTER_NAME;
+                break;
+              case 1:
+                systemState = SOUND;
+                break;
+              case 2:
+                systemState = DIFICULTY;
+                break;
+              case 3:
+                systemState = LCD_BRIGHTNESS_CONTROL;
+                break;
+              case 4:
+                systemState = LCD_CONTRAST_CONTROL;
+                break;
+              case 5:
+                systemState = MATRIX_BRIGHTNESS_CONTROL;
+                break;
+              case 6:
+                systemState = MENU;
+                break;
+              default:
+                break;
+            }
+            lcd.resetCursorLine();
+          }
+          break;
+        }
       case ENTER_NAME:
         {
-          Serial.println("EnterName");
+          lcd.clear();
+          lcd.enterName();
+          joystick.updateButtonState();
+          if (joystick.isButtonLongPressed()) {
+            lcd.resetCursorLine();
+            systemState = SETTINGS;
+          }
           break;
         }
       case LCD_BRIGHTNESS_CONTROL:
         {
-          Serial.println("LCD Brightness control");
+          lcd.clear();
+          JoystickDirection direction = joystick.getJoystickDirection();
+          lcd.lcdBrightnessControl(direction);
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = SETTINGS;
+          }
+          break;
+        }
+      case LCD_CONTRAST_CONTROL:
+        {
+          lcd.clear();
+          JoystickDirection direction = joystick.getJoystickDirection();
+          lcd.lcdContrastControl(direction);
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = SETTINGS;
+          }
           break;
         }
       case MATRIX_BRIGHTNESS_CONTROL:
         {
+          lcd.clear();
+          JoystickDirection direction = joystick.getJoystickDirection();
+          lcd.matrixBrightnessControl(direction);
           Serial.println("MATRIX_BRIGHTNESS_CONTROL");
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = SETTINGS;
+          }
           break;
         }
       case SOUND:
         {
-          Serial.println("Sound");
+          lcd.clear();
+          JoystickDirection direction = joystick.getJoystickDirection();
+          lcd.toggleSound(direction);
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = SETTINGS;
+          }
           break;
         }
       case GAMEPLAY:
         {
-          Serial.println("Gameplay");
+          
+          lcd.printLine(0, "Walls left:  ", false);
+          int bricks = ledMatrix.getBricksLeft();
+          char* nr = (char*)bricks;
+          lcd.printLine(1, nr, false);
+          lcd.gamePlay();
+          ledMatrix.gamePlay();
+          
+          break;
+        }
+      case DIFICULTY:
+        {
+          lcd.clear();
+          JoystickDirection direction = joystick.getJoystickDirection();
+          lcd.displayDifficultyLevel(direction);
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = SETTINGS;
+          }
           break;
         }
       case END_LOSE:

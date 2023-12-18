@@ -5,7 +5,6 @@ class Joystick {
 private:
   int xValue;
   int yValue;
-  bool isButtonPressed;
   int pressedTime;
   int releasedTime;
   int isShortPress = false;
