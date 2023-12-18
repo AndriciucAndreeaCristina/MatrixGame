@@ -13,6 +13,7 @@ private:
   JoystickDirection joystickState;
   ezButton button;
   bool wasPressed;
+  JoystickDirection lastDirection;
 
 public:
   Joystick()
@@ -22,6 +23,7 @@ public:
     pinMode(JOYSTICK_SW, INPUT_PULLUP);
     button.setDebounceTime(100);
     joystickState = CENTER;
+    lastDirection = CENTER;
   }
   int readX() {
     xValue = analogRead(JOYSTICK_X);
@@ -41,13 +43,16 @@ public:
     return isLongPress;
   }
   void updateButtonState() {
+    isShortPress = false;
+    isLongPress = false;
     button.loop();
     if (button.isPressed()) {
       isShortPress = false;
       isLongPress = false;
       pressedTime = millis();
+      wasPressed = true;
     }
-    if (button.isReleased()) {
+    if (button.isReleased() && wasPressed) {
       releasedTime = millis();
       long pressDuration = releasedTime - pressedTime;
       if (pressDuration < SHORT_PRESS_TIME) {
@@ -78,6 +83,14 @@ public:
       }
     }
     return joystickState;
+  }
+  JoystickDirection getJoystickLastDirection() {
+    return lastDirection;
+  }
+  void setJoystickLastDirection(JoystickDirection dir) {
+    lastDirection = dir;
+  }
+  void handleMenu() {
   }
 };
 

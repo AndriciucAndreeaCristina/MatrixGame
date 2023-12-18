@@ -9,14 +9,14 @@
 #include "Buzzer.h"
 #include "RGBLed.h"
 
-Joystick joystick;
-LEDMatrix ledMatrix(DIN, CLK, CS);
+static Joystick joystick;
+static LEDMatrix ledMatrix(DIN, CLK, CS);
 static LCDDisplay lcd(RS, EN, D4, D5, D6, D7);
 Buzzer buzzer;
 RGBLed rgbLed;
 
 #include "Menu.h"
-Menu* menu = Menu::getMenuInstance();
+static Menu* menu = Menu::getMenuInstance();
 
 void setup() {
   Serial.begin(9600);
@@ -25,4 +25,5 @@ void setup() {
 void loop() {
   joystick.updateButtonState();
   menu->handleStates();
+  
 }

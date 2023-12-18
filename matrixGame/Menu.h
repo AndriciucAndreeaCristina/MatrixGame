@@ -15,27 +15,75 @@ public:
     }
     return menuInstance;
   }
+
   void handleStates() {
     switch (systemState) {
       case IDLE:
         {
-          Serial.println("Idle");
-          lcd.LCDintroMenu();
+          lcd.updateDisplayIntro();
+          ledMatrix.updateDisplayIntro();
+          if (joystick.isButtonShortPressed()) {
+            systemState = MENU;
+          }
           break;
         }
       case MENU:
         {
-          Serial.println("Menu");
+          JoystickDirection direction = joystick.getJoystickDirection();
+          ledMatrix.updateDisplayMenu();
+          lcd.updateDisplayMenu(direction);
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            int choice = lcd.getMenuItemIndex();
+            Serial.println(choice);
+            lcd.clear();
+            switch (choice) {
+              case 0:
+                systemState = SETTINGS;
+                break;
+              case 1:
+                systemState = ABOUT;
+                break;
+              case 2:
+                systemState = HOW_TO_PLAY;
+                break;
+              case 3:
+                systemState = START;
+                break;
+              default:
+                break;
+            }
+          }
           break;
         }
       case START:
         {
           Serial.println("Start");
+          lcd.clear();
+          break;
+        }
+      case HOW_TO_PLAY:
+        {
+          Serial.println("HOW_TO_PLAY");
+          lcd.updateHowToPlay();
+          ledMatrix.updateHowToPlay();
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = MENU;
+          }
           break;
         }
       case ABOUT:
         {
           Serial.println("About");
+          ledMatrix.updateAbout();
+          lcd.updateAbout();
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = MENU;
+          }
           break;
         }
       case HIGHSCORES:
@@ -45,7 +93,13 @@ public:
         }
       case SETTINGS:
         {
-          Serial.println("Settings");
+          Serial.println("Menu Settings");
+          lcd.clear();
+          joystick.updateButtonState();
+          if (joystick.isButtonShortPressed()) {
+            lcd.resetCursorLine();
+            systemState = MENU;
+          }
           break;
         }
       case ENTER_NAME:

@@ -7,8 +7,8 @@
 #define JOYSTICK_X A0
 #define JOYSTICK_Y A1
 #define JOYSTICK_SW 2
-#define JOYSTICK_MIN_THRESHOLD 400
-#define JOYSTICK_MAX_THRESHOLD 600
+#define JOYSTICK_MIN_THRESHOLD 200
+#define JOYSTICK_MAX_THRESHOLD 800
 #define SHORT_PRESS_TIME 300
 #define LONG_PRESS_TIME 800
 enum JoystickDirection {
@@ -24,6 +24,82 @@ enum JoystickDirection {
 #define CS 11
 #define CLK 10
 #define EEPROM_BRIGHTNESS_ADDR 20
+const uint8_t textStart[][8] = {
+  { 0b00000000,
+    0b00011000,
+    0b00100100,
+    0b00001100,
+    0b00110000,
+    0b00100100,
+    0b00001000,
+    0b00000000 },
+  { 0b00000000,
+    0b01111100,
+    0b00010000,
+    0b00010000,
+    0b00010000,
+    0b00010000,
+    0b00000000,
+    0b00000000 },
+  { 0b00000000,
+    0b00111100,
+    0b00100100,
+    0b00100100,
+    0b00111100,
+    0b00100100,
+    0b00100100,
+    0b00000000 },
+  { 0b00000000,
+    0b00111100,
+    0b00100100,
+    0b00111100,
+    0b00001100,
+    0b00010100,
+    0b00100100,
+    0b00000000 },
+  { 0b00000000,
+    0b01111100,
+    0b00010000,
+    0b00010000,
+    0b00010000,
+    0b00010000,
+    0b00000000,
+    0b00000000 }
+};
+const int n = 8;
+const int textStartN = 5;
+const int LEDMatrixInterval = 100;
+const byte doubleSquare[n] = {
+  0b11111111,
+  0b11000011,
+  0b10111101,
+  0b10100101,
+  0b10100101,
+  0b10111101,
+  0b11000011,
+  0b11111111
+};
+const byte heartSymbol[8] = {
+  B00000000,
+  B01100110,
+  B11111111,
+  B11111111,
+  B01111110,
+  B00111100,
+  B00011000,
+  B00000000
+};
+const byte questionMark[8] = {
+  B00111100,
+  B01000010,
+  B00100000,
+  B00010000,
+  B00001000,
+  B00000000,
+  B00001000,
+  B00000000
+};
+
 
 /***************** LCDDISPLAY.H *****************/
 #define RS 9
@@ -34,6 +110,19 @@ enum JoystickDirection {
 #define D7 4
 #define CONTRAST_PIN 3
 #define EEPROM_CONTRAST_ADDR 10
+const char *aboutText1 = "   Bomberman";
+const char *aboutText2 = "Author/Github: AndriciucAndreeaCristina";
+const byte bombSymbol[8] = {
+	0b00001,
+	0b00010,
+	0b00100,
+	0b01110,
+	0b11111,
+	0b11111,
+	0b11111,
+	0b01110
+};
+
 
 /***************** LED.H *****************/
 #define BLUE_PIN A3
@@ -46,6 +135,7 @@ enum States {
   START,
   MENU,
   ABOUT,
+  HOW_TO_PLAY,
   HIGHSCORES,
   SETTINGS,
   ENTER_NAME,
